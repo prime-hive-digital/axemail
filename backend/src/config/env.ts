@@ -11,7 +11,7 @@ const requiredEnv = (key: string): string => {
 };
 
 export const ENV = {
-    PORT: Number(process.env.PORT) || 8000,
+    PORT: Number(process.env.PORT) || 8080,
     NODE_ENV: process.env.NODE_ENV || "development",
 
     FRONTEND_URL: requiredEnv("FRONTEND_URL"),
