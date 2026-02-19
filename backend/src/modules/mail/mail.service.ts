@@ -31,24 +31,32 @@ const submitToGateway = async (payload: any) => {
         .update(timestamp + "." + bodyString)
         .digest("hex");
 
-    const res = await fetch(ENV.GATEWAY_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-axe-timestamp": timestamp,
-            "x-axe-signature": signature,
-        },
-        body: bodyString,
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
-    const data = (await res.json().catch(() => ({}))) as GatewayResponse;
+    try {
+        const res = await fetch(ENV.GATEWAY_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-axe-timestamp": timestamp,
+                "x-axe-signature": signature,
+            },
+            body: bodyString,
+            signal: controller.signal,
+        });
 
-    if (!res.ok || !data.success) {
-        const reason = data?.error || `GATEWAY_HTTP_${res.status}`;
-        throw new Error(reason);
+        const data = (await res.json().catch(() => ({}))) as GatewayResponse;
+
+        if (!res.ok || !data.success) {
+            const reason = data?.error || `GATEWAY_HTTP_${res.status}`;
+            throw new Error(reason);
+        }
+
+        return data;
+    } finally {
+        clearTimeout(timeout);
     }
-
-    return data;
 };
 
 export const sendMail = async (userId: string, payload: SendMailInput) => {
