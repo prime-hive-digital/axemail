@@ -36,7 +36,7 @@ export const login = async (
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            domain: isProd ? ".uspto-federal-filings.org" : undefined,
+            domain: isProd ? ".axemail.cloud" : undefined,
             maxAge: 8 * 60 * 60 * 1000,
         });
 
@@ -44,7 +44,7 @@ export const login = async (
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            domain: isProd ? ".uspto-federal-filings.org" : undefined,
+            domain: isProd ? ".axemail.cloud" : undefined,
             maxAge: 8 * 60 * 60 * 1000,
         });
 
@@ -73,7 +73,7 @@ export const refresh = async (
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            domain: isProd ? ".uspto-federal-filings.org" : undefined,
+            domain: isProd ? ".axemail.cloud" : undefined,
             maxAge: 8 * 60 * 60 * 1000,
         });
 
@@ -100,14 +100,14 @@ export const logout = async (
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            domain: isProd ? ".uspto-federal-filings.org" : undefined,
+            domain: isProd ? ".axemail.cloud" : undefined,
         });
 
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            domain: isProd ? ".uspto-federal-filings.org" : undefined,
+            domain: isProd ? ".axemail.cloud" : undefined,
         });
 
         successResponse(res, null, "Logged out");
