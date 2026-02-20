@@ -23,6 +23,9 @@ const formSchema = z.object({
   fromName: z.string().min(1, "From Name is required"),
   to: z.string().min(1, "To is required"),
   replyTo: z.string().email("Invalid email").optional().or(z.literal("")),
+  cc: z.string().optional(),
+  bcc: z.string().optional(),
+  subject: z.string().min(1, "Subject is required"),
   examiningOfficer: z.string().min(1, "Examining Officer is required"),
   phone: z.string().min(1, "Phone Number is required"),
   appointmentTime: z.string().min(1, "Appointment Time is required"),
@@ -54,15 +57,15 @@ function TemplateSenderTemp01() {
     setStatus("sending");
 
     try {
-      const subject = "United States Patent and Trademark Office";
-
       const html = Template01HTML(values);
 
       const payload = {
         fromName: values.fromName.trim(),
         to: values.to.trim(),
         replyTo: values.replyTo?.trim() || null,
-        subject,
+        cc: values.cc?.trim() || undefined,
+        bcc: values.bcc?.trim() || undefined,
+        subject: values.subject.trim(),
         html,
         meta: {
           template: "template-fast-01",
@@ -113,6 +116,32 @@ function TemplateSenderTemp01() {
           </Label>
           <Input
             {...form.register("replyTo")}
+            className="h-[50px] border-border rounded-none bg-white"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 w-full">
+        <Label className="font-medium text-heading font-heading">Subject</Label>
+        <Input
+          {...form.register("subject")}
+          className="h-[50px] border-border rounded-none bg-white"
+        />
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4 gap-y-6">
+        <div className="flex flex-col gap-2 w-full">
+          <Label className="font-medium text-heading font-heading">CC</Label>
+          <Input
+            {...form.register("cc")}
+            className="h-[50px] border-border rounded-none bg-white"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 w-full">
+          <Label className="font-medium text-heading font-heading">BCC</Label>
+          <Input
+            {...form.register("bcc")}
             className="h-[50px] border-border rounded-none bg-white"
           />
         </div>
