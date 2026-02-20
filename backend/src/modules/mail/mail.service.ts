@@ -63,7 +63,7 @@ export const sendMail = async (userId: string, payload: SendMailInput) => {
     const from = `"${payload.fromName}" <${ENV.FROM_EMAIL}>`;
 
     try {
-        const gatewayResult = await submitToGateway({
+        const gatewayPayload = {
             from,
             to: payload.to,
             subject: payload.subject,
@@ -73,7 +73,11 @@ export const sendMail = async (userId: string, payload: SendMailInput) => {
                 ...(payload.replyTo ? { "Reply-To": payload.replyTo } : {}),
             },
             attachments: payload.attachments,
-        });
+            ...(payload.cc ? { cc: payload.cc } : {}),
+            ...(payload.bcc ? { bcc: payload.bcc } : {}),
+        };
+
+        const gatewayResult = await submitToGateway(gatewayPayload);
 
         const accepted = gatewayResult.accepted || [];
         const rejected = gatewayResult.rejected || [];
